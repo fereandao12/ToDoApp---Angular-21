@@ -1,0 +1,73 @@
+<div class="dashboard-container min-h-screen bg-gray-100 p-4 sm:p-6">
+  <header
+    class="navbar max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6"
+  >
+    <h2 class="text-2xl font-bold text-gray-800">Panel de Tareas</h2>
+
+    <div class="header-actions flex flex-col sm:flex-row gap-3">
+      <button
+        class="btn-primary px-4 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition w-full sm:w-auto"
+        routerLink="/todos/new"
+      >
+        Nueva Tarea
+      </button>
+
+      <button
+        class="btn-logout px-4 py-2 rounded-lg bg-red-500 text-white font-medium hover:bg-red-600 transition w-full sm:w-auto"
+        (click)="onLogout()"
+      >
+        Cerrar Sesión
+      </button>
+    </div>
+  </header>
+
+  <main class="content max-w-7xl mx-auto">
+    <div class="todo-grid grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      @for (todo of todoService.todos(); track todo.id) {
+        <article
+          class="todo-card bg-white rounded-xl shadow-md p-4 flex flex-col justify-between hover:shadow-lg transition"
+        >
+          <div class="todo-header flex items-start justify-between gap-3 mb-2">
+            <h3 class="text-lg font-semibold text-gray-800 wrap-break-word">
+              {{ todo.title }}
+            </h3>
+
+            <span
+              class="status-badge text-xs font-semibold px-2 py-1 rounded-full capitalize"
+              [ngClass]="getStatusClasses(todo.status)"
+              [class]="todo.status.toLowerCase()"
+            >
+              {{ todo.status }}
+            </span>
+          </div>
+
+          <p class="todo-desc text-sm text-gray-600 mb-4">
+            {{ todo.description || 'Sin descripción' }}
+          </p>
+
+          <div class="todo-actions flex gap-2 mt-auto">
+            <button
+              class="btn-edit flex-1 px-3 py-2 rounded-lg bg-yellow-400 text-gray-900 text-sm font-medium hover:bg-yellow-500 transition"
+              [routerLink]="['/todos/edit', todo.id]"
+            >
+              Editar
+            </button>
+
+            <button
+              class="btn-delete flex-1 px-3 py-2 rounded-lg bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition"
+              (click)="onDelete(todo.id)"
+            >
+              Eliminar
+            </button>
+          </div>
+        </article>
+      } @empty {
+        <div class="empty-state col-span-full flex justify-center items-center py-16">
+          <p class="text-gray-500 text-center text-lg">
+            No tienes tareas registradas actualmente. ¡Crea una nueva!
+          </p>
+        </div>
+      }
+    </div>
+  </main>
+</div>
